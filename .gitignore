@@ -1,0 +1,23 @@
+# The release jar is distributed as a GitHub Release attachment, not committed.
+# dist/ is where it is staged locally before upload.
+#
+# Note: this is deliberately a directory ignore, NOT a `*.jar` pattern. A broad
+# `*.jar` rule would silently swallow the artifact if this repo ever does start
+# committing binaries.
+dist/
+
+# Editors / IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Local environment
+.env
+.env.local

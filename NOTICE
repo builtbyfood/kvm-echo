@@ -1,0 +1,57 @@
+kvm-echo
+Copyright 2026 Travis DeLuca
+
+Licensed under the Apache License, Version 2.0 (the "License"); you may not
+use this file except in compliance with the License. You may obtain a copy of
+the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+License for the specific language governing permissions and limitations under
+the License.
+
+
+TRADEMARKS
+----------
+
+Morpheus is a trademark of Morpheus Data, LLC. HPE and HPE VM Essentials are
+trademarks of Hewlett Packard Enterprise Development LP. Wireshark is a
+registered trademark of the Wireshark Foundation.
+
+This is a community project. It is not produced, endorsed, certified or
+supported by Morpheus Data, Hewlett Packard Enterprise, or the Wireshark
+Foundation. These marks are used only to identify the software this plugin
+interoperates with.
+
+
+THIRD-PARTY COMPONENTS
+----------------------
+
+Morpheus Plugin API and morpheus-plugin-gradle
+    Copyright Morpheus Data, LLC
+    Licensed under the Apache License, Version 2.0
+    Compiled against and distributed with this plugin.
+
+tcpdump / libpcap
+    Copyright the Tcpdump Group
+    Licensed under the BSD 3-Clause License
+    System-installed on the KVM host. Invoked at runtime as an external
+    process. Not modified and not redistributed with this plugin.
+
+libvirt tooling (virsh)
+    Copyright Red Hat, Inc. and contributors
+    Licensed under the GNU Lesser General Public License, version 2.1 or later
+    System-installed on the KVM host. Invoked at runtime as an external
+    process. Not modified, not linked against, and not redistributed with
+    this plugin.
+
+cryptography (Python)
+    Copyright the Python Cryptographic Authority and individual contributors
+    Dual licensed under the Apache License, Version 2.0 and the BSD 3-Clause
+    License
+    Required on the KVM host by the bundled echo-aead.py helper, which runs as
+    a standalone process. Not linked against and not redistributed with this
+    plugin.
