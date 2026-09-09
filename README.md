@@ -57,7 +57,7 @@ once a capture's key lapses, its ciphertext is unrecoverable by design.*
 
 Every capture can be scoped with a standard `tcpdump` BPF filter, either typed directly or
 chosen from a dropdown of 48 presets grouped by traffic type: web, remote access,
-infrastructure, storage, database, virtualisation, container, messaging, email, and
+infrastructure, storage, database, virtualization, container, messaging, email, and
 diagnostics.
 
 Filters are applied at capture time, on the host, before anything is encrypted or written —

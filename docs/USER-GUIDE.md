@@ -141,7 +141,7 @@ Every capture can be scoped with a standard `tcpdump` BPF filter. Two ways to se
 
 **Pick a preset.** The dropdown offers 48 presets grouped by traffic type — web, remote
 access (SSH/RDP/VNC/WinRM), infrastructure (DNS/DHCP/NTP/LDAP/Kerberos/SNMP/syslog),
-storage (iSCSI/NFS/SMB/NVMe-TCP/FTP), databases, virtualisation, containers, messaging,
+storage (iSCSI/NFS/SMB/NVMe-TCP/FTP), databases, virtualization, containers, messaging,
 email, and diagnostics (ICMP/ARP/broadcast). Choosing one applies its filter.
 
 **Or write your own.** Leave the preset on `— custom (use filter field below) —` and type a

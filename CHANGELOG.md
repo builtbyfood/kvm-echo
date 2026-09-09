@@ -6,7 +6,7 @@ This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## 0.8.1 — 2026-09-08
 
-Automation Task and Workflow captures now honour the options you configure.
+Automation Task and Workflow captures now honor the options you configure.
 
 ### Fixed
 
@@ -30,7 +30,7 @@ Automation Task and Workflow captures now honour the options you configure.
 ### Verified
 
 A 90-second Automation Task capture against a KVM host, confirmed end to end: requested
-duration honoured, ciphertext produced, exported and opened in Wireshark.
+duration honored, ciphertext produced, exported and opened in Wireshark.
 
 ## 0.8.0 — 2026-09-07
 
@@ -41,7 +41,7 @@ Capture presets became real filters.
 - **48 capture presets now carry actual BPF filter expressions.** Previously the preset
   dropdown was a labelling device — choosing "Web / HTTP + HTTPS" recorded the name but did
   not filter anything. Each preset now selects a real filter, covering web, remote access,
-  infrastructure, storage, database, virtualisation, container, messaging, email and
+  infrastructure, storage, database, virtualization, container, messaging, email and
   diagnostic traffic.
 - **A capture preset dropdown on the host and VM tab capture form**, alongside the existing
   free-form BPF filter field.
@@ -67,7 +67,7 @@ First public release.
 - Plugin icon replaced with the project's own mark in the plugins list. No third-party
   brand elements.
 - Publisher attribution corrected to `builtbyfood`.
-- No behaviour change.
+- No behavior change.
 
 ## 0.7.9 — 2026-08-13 (pre-release)
 
@@ -75,7 +75,7 @@ Public-facing name aligned with the repository.
 
 - The plugin now identifies itself as `kvm-echo` throughout the Morpheus UI — the plugins
   list, the per-host tab, and the panel itself. Previously these read `morpheus-echo`.
-- No behaviour change. The plugin's internal identity is unchanged, so captures, exports,
+- No behavior change. The plugin's internal identity is unchanged, so captures, exports,
   scheduled tasks and existing host bootstrap are unaffected.
 
 ## 0.7.8 — 2026-08-13 (pre-release)
