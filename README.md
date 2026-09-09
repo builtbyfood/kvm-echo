@@ -9,14 +9,14 @@ capture on KVM hosts, with the pcap encrypted before it ever touches disk.
 ![license](https://img.shields.io/badge/license-Apache--2.0-blue)
 
 ![Host tab capture form](docs/images/01-host-tab-capture-form.png)
-*The capture form on a KVM hypervisor's kvm-echo tab. The interface list comes from
+*The capture form on a HVM hypervisor's kvm-echo tab. The interface list comes from
 `ip link` on the host; on a VM's tab it comes from `virsh domiflist` instead.*
 
 ---
 
 ## Why
 
-Capturing packets for a VM on a KVM hypervisor today means SSHing to the host, working out
+Capturing packets for a VM on a HVM hypervisor today means SSHing to the host, working out
 which `vnet` interface belongs to which guest, running `tcpdump` by hand, then getting the
 pcap off the box — usually leaving a cleartext capture sitting on the hypervisor's disk
 along the way, and usually forgetting to clean it up.
@@ -118,7 +118,7 @@ sha256sum -c kvm-echo-0.8.1-all.jar.sha256
 | | |
 |---|---|
 | **Morpheus / HPE VME** | 9.0 or later (plugin API 1.3.1) |
-| **Hosts** | KVM hypervisors managed by Morpheus |
+| **Hosts** | HVM hypervisors managed by Morpheus |
 | **Host OS** | Ubuntu 24 tested. Earlier Ubuntu likely works; RHEL / other untested |
 | **Bootstrap** | `setcap` on `tcpdump`; `morpheus-node` in the `libvirt` group |
 | **Account** | Able to run execution requests against those hosts |
@@ -136,7 +136,7 @@ write or maintain.
 
 ## Two things it deliberately does not do
 
-**It does not capture inside the guest.** Everything happens on the KVM host — `tcpdump`
+**It does not capture inside the guest.** Everything happens on the HVM host — `tcpdump`
 reads the `vnet` tap interface from outside the VM. Guests are unaware and unmodified,
 with nothing to install and nothing to keep up to date. The tradeoff is symmetric: it can
 capture traffic the guest's own firewall drops, but it cannot decrypt payloads the host
