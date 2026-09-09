@@ -1,6 +1,6 @@
 # kvm-echo — User Guide
 
-A Morpheus VME plugin that adds per-VM packet capture on KVM hosts. Everything runs on the
+A Morpheus VME plugin that adds per-VM packet capture on HVM hosts. Everything runs on the
 hypervisor (no in-guest agent), the capture is AES-256-GCM encrypted before it ever touches
 disk, and the appliance decrypts on demand for download.
 
@@ -18,11 +18,11 @@ surfaces, and what to do when something goes wrong. For the current version, see
 - SSH access to the appliance (for troubleshooting log grabs — not required for normal use)
 - The plugin JAR — download from the [Releases](../../releases/latest) page
 
-**KVM host side (where the actual captures run):**
+**HVM host side (where the actual captures run):**
 
 - Ubuntu 24 is what has been tested. Earlier Ubuntu will probably work but is unverified.
   RHEL/other is untested.
-- KVM/libvirt/OVS (or Linux bridges) — the standard Morpheus HVM setup
+- HVM/libvirt/OVS (or Linux bridges) — the standard Morpheus HVM setup
 - `morpheus-node` agent installed and reporting to the appliance
 - `tcpdump` installed (usually already is)
 - Some free RAM in `/dev/shm` — captures land there, cleared on reboot
@@ -33,7 +33,7 @@ escalation to run the wrapper as root directly, without any host-side sudoers co
 
 **VMs to test with:**
 
-- At least one KVM VM running on your test host, with some network traffic on it (ping,
+- At least one HVM VM running on your test host, with some network traffic on it (ping,
   curl, whatever)
 - If you have multiple VMs, better — the plugin's "VM tab" path captures per-guest interface
   (`vnet*`), and the "host tab" path captures anything on the host including physical NICs
@@ -41,14 +41,14 @@ escalation to run the wrapper as root directly, without any host-side sudoers co
 
 ---
 
-## Set up your KVM host (one-time)
+## Set up your HVM host (one-time)
 
 The plugin auto-detects what's missing and shows you a red panel with copy-paste remedies.
 You can skip this section and just navigate to your host in Morpheus — but if you'd rather
 set it up first, here's what needs to be there:
 
 ```bash
-# On each KVM host, as root or via sudo:
+# On each HVM host, as root or via sudo:
 
 # 1. tcpdump needs raw-packet capabilities
 sudo setcap cap_net_raw,cap_net_admin=eip /usr/bin/tcpdump
@@ -96,9 +96,9 @@ version is loaded.*
 This is the interactive surface: you're looking at a specific host or VM, and you want a
 capture right now.
 
-### On a KVM host
+### On a HVM host
 
-1. Navigate to **Infrastructure → Compute** and click on a KVM host
+1. Navigate to **Infrastructure → Compute** and click on a HVM host
 2. Click the **kvm-echo** tab
 3. **Preflight panel:** if red, it lists exactly which check failed with a copy-paste
    remedy. Fix it and reload the tab. If green or absent, the form appears.
@@ -197,7 +197,7 @@ Workflow, or attach to a Job schedule.
      the warning below about `auto`.
    - **Duration**, **Packet cap**, **Byte cap**
 4. Set the Execute Target and save
-5. Run it against a KVM host
+5. Run it against a HVM host
 
 ![Task form](images/08-task-form.png)
 *The Echo Packet Capture task type. These options are read at run time.*
@@ -205,7 +205,7 @@ Workflow, or attach to a Job schedule.
 > ### `auto` does not work when the target is a hypervisor
 >
 > The `Interface` field defaults to `auto`, which resolves by asking libvirt which tap
-> belongs to the target **guest**. When the Task targets a KVM host directly there is no
+> belongs to the target **guest**. When the Task targets a HVM host directly there is no
 > guest to ask, and the capture fails immediately with `iface is required`.
 >
 > **Name the interface explicitly** on any Task that targets a host. `auto` only works when
@@ -315,7 +315,7 @@ Preventive habit: if you're planning to restart the plugin, export any pending c
 
 ** `auto` interface fails on hypervisor-targeted Tasks**
 
-Covered above. Name the interface explicitly on any Task whose target is a KVM host.
+Covered above. Name the interface explicitly on any Task whose target is a HVM host.
 
 ** The "Preset composition" control is not yet functional**
 
@@ -373,7 +373,7 @@ troubleshooting.
   ```bash
   sudo grep '<jobId>' /var/log/morpheus/morpheus-ui/current | tail -50
   ```
-- Host-side wrapper log (SSH to the KVM host):
+- Host-side wrapper log (SSH to the HVM host):
   ```bash
   sudo cat /dev/shm/echo/<jobId>.log
   sudo cat /dev/shm/echo/<jobId>.status
@@ -426,7 +426,7 @@ Then: screenshot plus browser DevTools inspection of the element in question.
 - Rotated: `/var/log/morpheus/morpheus-ui/@<timestamp>.s`
 - Historical grep: `sudo zgrep '<jobId>' /var/log/morpheus/morpheus-ui/@*.s`
 
-**KVM host (per-capture):**
+**HVM host (per-capture):**
 
 - Wrapper log: `/dev/shm/echo/<jobId>.log`
 - Status file: `/dev/shm/echo/<jobId>.status`
@@ -435,7 +435,7 @@ Then: screenshot plus browser DevTools inspection of the element in question.
 - All ephemeral, cleared on host reboot
 - Files are root-owned as of 0.7.8 — use `sudo` when inspecting
 
-**KVM host (per-capture tools):**
+**HVM host (per-capture tools):**
 
 - `/dev/shm/echo-tools-<jobId>/` (cleared after capture)
 
@@ -446,7 +446,7 @@ Then: screenshot plus browser DevTools inspection of the element in question.
 Open an issue using the [bug report template](../.github/ISSUE_TEMPLATE/bug_report.md) — it
 lists everything worth including, so this guide doesn't repeat it here.
 
-The short version: plugin version, Morpheus version, KVM host OS, what you did, what you
+The short version: plugin version, Morpheus version, HVM host OS, what you did, what you
 expected, what happened instead, and the `jobId` if a capture or export was involved, plus
 the appliance and host logs listed above.
 
