@@ -238,6 +238,8 @@ approach expiry.*
 4. Open it in Wireshark
 
 ![Download ready](images/06-export-download.png)
+*Export Preparing.*
+![Download ready](images/06-export-download2.png)
 *Export complete. The pcap is decrypted on the appliance and served directly.*
 
 ![Wireshark](images/07-wireshark.png)
