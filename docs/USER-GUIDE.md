@@ -237,7 +237,7 @@ approach expiry.*
 3. Click **DOWNLOAD PCAP** and save the file
 4. Open it in Wireshark
 
-![Download ready](images/06-export-download.png)
+![Preparing](images/06-export-download.png)
 *Export Preparing.*
 ![Download ready](images/06-export-download2.png)
 *Export complete. The pcap is decrypted on the appliance and served directly.*
