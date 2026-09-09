@@ -61,7 +61,7 @@ corruption, rather than as a misleading crypto or format error.
 
 ## What the plugin does not do
 
-- **No in-guest agent.** Captures run entirely on the KVM host. Guests are unmodified and
+- **No in-guest agent.** Captures run entirely on the HVM host. Guests are unmodified and
   have nothing installed in them.
 - **No persistent cleartext.** At no stage is an unencrypted pcap written to disk, on the
   hypervisor or on the appliance. There is no cleanup step for an operator to forget.
