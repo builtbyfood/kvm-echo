@@ -1,7 +1,7 @@
 # kvm-echo
 
 A plugin for **Morpheus / HPE VM Essentials, Advanced, Enterprise** that adds per-VM packet
-capture on KVM hosts, with the pcap encrypted before it ever touches disk.
+capture on HVM hosts, with the pcap encrypted before it ever touches disk.
 
 ![status](https://img.shields.io/badge/version-0.8.1-blue)
 ![morpheus](https://img.shields.io/badge/Morpheus-9.0%2B-green)
