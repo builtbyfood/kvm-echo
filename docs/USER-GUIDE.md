@@ -91,6 +91,50 @@ version is loaded.*
 
 ---
 
+## Tab settings
+
+Open **Administration → Integrations → Plugins** and edit **kvm-echo**. Two settings at the
+top of the form control the tab (added in 0.9.1):
+
+| Setting | Default | What it does |
+|---|---|---|
+| **Show the kvm-echo tab** | On | The off switch. Untick it to remove the kvm-echo tab from every VM and host detail page. Takes effect within 60 seconds. |
+| **Tab Load Mode** | `onOpen` | `onOpen` loads the tab's content the first time you open the tab. `manual` loads nothing until you click **Load**. |
+
+Switching the tab off does **not** stop captures run from Automation Tasks or Workflows, and
+it does not stop the background key-lease refresh, so existing captures stay exportable
+once you switch the tab back on.
+
+### How the tab loads
+
+Morpheus builds every plugin tab while it builds a VM or host detail page, whether or not
+you open that tab. From 0.9.1 the kvm-echo tab hands Morpheus a small placeholder for that
+step and contacts the hypervisor only when the tab is actually shown, so a slow or
+unreachable host no longer delays the detail page.
+
+What you see on the tab:
+
+- **Loading…** with a running count of seconds, then **Loaded in N.N s** once the content
+  is in.
+- **Refresh** re-reads everything from the host. Without it, repeat views within a short
+  window are served from memory: preflight for 5 minutes, the interface list for 30
+  seconds, the Captures table for 20 seconds. Starting, exporting or deleting a capture
+  updates the table straight away.
+- **Don't auto-load this tab** makes the tab wait for **Load** in your browser only. It is
+  remembered per browser and does not change the setting for anyone else.
+- If the host does not answer within 8 seconds the tab says which host timed out and shows
+  **Retry**. Retry and Refresh never repeat an action — they will not start a second
+  capture or delete anything.
+
+### Who can load the tab
+
+The tab's content is served from a plugin endpoint that Morpheus protects with the
+`admin-cm` permission at **Full**. A user whose role lacks it still sees the kvm-echo tab,
+but the tab shows an error instead of the capture form. Before 0.9.1 the tab had no
+permission check of its own.
+
+---
+
 ## Capturing from a host or VM tab
 
 This is the interactive surface: you're looking at a specific host or VM, and you want a
@@ -99,9 +143,11 @@ capture right now.
 ### On a HVM host
 
 1. Navigate to **Infrastructure → Compute** and click on a HVM host
-2. Click the **kvm-echo** tab
+2. Click the **kvm-echo** tab. It loads its content from the host at this point — a second
+   or two is normal. In `manual` load mode, click **Load**.
 3. **Preflight panel:** if red, it lists exactly which check failed with a copy-paste
-   remedy. Fix it and reload the tab. If green or absent, the form appears.
+   remedy. Fix it and click **Refresh** (the preflight result is otherwise remembered for
+   5 minutes). If green or absent, the form appears.
 4. Pick an interface — the dropdown lists the host's own NICs, bridges and bonds, read from
    `ip link` on the host, grouped by type
 5. Set duration, packet cap and byte cap, or leave the defaults (30s / 10,000 / 10 MB)
@@ -356,7 +402,23 @@ Detail rows in the panel might look slightly wider than their container. Cosmeti
 on the PASS panel, in the Captures table row, and in every log line. It's the anchor for
 troubleshooting.
 
+### If the tab is missing
+
+Check **Show the kvm-echo tab** in the plugin's settings — see [Tab settings](#tab-settings).
+A change there takes up to 60 seconds to show.
+
 ### If the tab won't load
+
+The tab states what went wrong in place of its content. The common ones:
+
+| Message | Meaning |
+|---|---|
+| `<host> did not answer within 8 s` | The hypervisor is slow or unreachable. Click **Retry**. The detail page itself is unaffected. |
+| An HTTP 403 or a permission error | Your role lacks the `admin-cm` permission at Full — see [Who can load the tab](#who-can-load-the-tab). |
+| `the kvm-echo tab is switched off in the plugin settings` | The off switch was turned off after this page was loaded. |
+| `Could not load the tab script` | The browser could not fetch the plugin's script. Click **Load** to retry; if it persists, send the browser console output. |
+
+If none of those fit:
 
 - Screenshot of what you see
 - Browser console errors (F12 → Console)
@@ -397,6 +459,11 @@ ran with. If it shows `null` for values you set, you are on a release before 0.8
 - jobId
 - Appliance log for that jobId
 - Whether the plugin was restarted recently before the export
+
+### If preflight stays red after you fixed the host
+
+The preflight result is remembered for 5 minutes. Click **Refresh** on the tab to run the
+checks again.
 
 ### If preflight is red and remedies don't help
 

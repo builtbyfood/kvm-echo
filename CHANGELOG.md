@@ -4,6 +4,70 @@ All notable changes to kvm-echo are documented here.
 
 This project follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.9.1 — 2026-11-18
+
+The kvm-echo tab no longer slows down server detail pages, and it can be switched off.
+
+Morpheus builds every plugin tab while it builds a VM or host detail page, whether or not
+anyone opens that tab. Through 0.8.1 the kvm-echo tab contacted the hypervisor up to three
+times during that step, with no time limit, so every detail page waited on it — and a slow
+or unreachable host could hold the page for as long as the host took to answer.
+
+### Changed
+
+- **The tab loads its content when it is opened, not when the page is built.** The detail
+  page now receives a small static placeholder that costs no host calls. The interface
+  list, preflight result and Captures table are fetched the first time the kvm-echo tab is
+  actually shown. The tab reports how long the load took and has a **Refresh** button.
+- **Every read the tab makes against a hypervisor now gives up after 8 seconds** and says
+  which host did not answer, with a **Retry** button, instead of waiting indefinitely.
+- **Repeat views are served from short-lived caches**: preflight for 5 minutes, the
+  interface list for 30 seconds, the Captures table for 20 seconds. **Refresh** bypasses
+  all three, and starting, exporting or deleting a capture refreshes the table
+  immediately.
+- **Capture progress updates in place.** The tab polls for progress itself rather than
+  reloading the whole detail page.
+- **The tab's content now requires the `admin-cm` permission at Full.** The tab's data is
+  served from a new plugin endpoint, `/plugin/echo/tab`, and Morpheus checks that
+  permission on it. Previously the tab had no permission check of its own. A user without
+  the permission still sees the kvm-echo tab but gets an error in place of its content.
+- **The release jar built from source is now named `kvm-echo-<version>-all.jar`.** No
+  change for anyone downloading from the Releases page, where it already carried that name.
+
+### Added
+
+- **Show the kvm-echo tab** — a plugin setting, on by default. Untick it to remove the tab
+  from every VM and host detail page; it takes effect within 60 seconds. It does not stop
+  captures run from Automation Tasks or Workflows, and it does not stop the background
+  key-lease refresh that keeps existing captures exportable.
+- **Tab Load Mode** — a plugin setting. `onOpen` (the default) loads the tab the first time
+  it is opened; `manual` loads nothing until **Load** is clicked.
+- **Don't auto-load this tab** — a per-browser checkbox on the tab itself, for one person
+  who wants manual loading without changing it for everyone.
+
+### Fixed
+
+- **0.9.0 could not be installed.** See below.
+
+### Upgrading
+
+Remove the installed plugin in **Administration → Integrations → Plugins** before
+uploading this jar, as with every release. Existing captures, keys, Tasks and host
+bootstrap are unaffected, and both new settings default to the previous behavior: tab
+shown, loaded on open.
+
+## 0.9.0 — 2026-11-18
+
+The lazy-loading tab, the two tab settings and the read time limits described under 0.9.1
+were built in this version.
+
+> **No release artifact is published for 0.9.0.** Morpheus rejected the jar at upload with
+> `Failed to parse plugin file`. The plugin registered its new data endpoint without also
+> registering its own template renderer, and Morpheus's plugin loader fails on that
+> combination while the plugin is being installed. Nothing was wrong with the jar file
+> itself, and a failed upload leaves the previously installed version untouched. 0.9.1 is
+> the same build with the renderer registered. Install 0.9.1.
+
 ## 0.8.1 — 2026-09-08
 
 Automation Task and Workflow captures now honor the options you configure.

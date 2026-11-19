@@ -36,6 +36,25 @@ end-to-end: the hypervisor never holds the plaintext, and the transport carries 
 only. Nothing is transmitted on a schedule, and nothing is transmitted as a side effect of
 a capture completing.
 
+## The tab's data endpoint
+
+From 0.9.1 the tab fetches its content from a plugin endpoint on the appliance,
+`/plugin/echo/tab`, when the tab is opened. It serves the same content the tab previously
+rendered inline — the capture form, preflight result and Captures table — and it is the
+path the tab's start, export and delete actions travel over. Encryption keys are never sent
+to the browser on it.
+
+A request is refused unless all of these hold:
+
+- it carries a signed-in Morpheus session, and that user's role has the `admin-cm`
+  permission at Full (checked by Morpheus before the plugin sees the request);
+- it carries the plugin's own request header, which a browser will not attach to a
+  cross-site request, and its `Origin` or `Referer` matches the appliance's own host;
+- the server it names belongs to the caller's tenant, or the caller is in the master tenant;
+- the **Show the kvm-echo tab** setting is on.
+
+Switching that setting off therefore closes the endpoint as well as hiding the tab.
+
 ## Retention
 
 Ciphertext on the hypervisor is cleared on host reboot, since tmpfs does not survive one.

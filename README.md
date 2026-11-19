@@ -3,7 +3,7 @@
 A plugin for **Morpheus / HPE VM Essentials, Advanced, Enterprise** that adds per-VM packet
 capture on HVM hosts, with the pcap encrypted before it ever touches disk.
 
-![status](https://img.shields.io/badge/version-0.8.1-blue)
+![status](https://img.shields.io/badge/version-0.9.1-blue)
 ![morpheus](https://img.shields.io/badge/Morpheus-9.0%2B-green)
 ![api](https://img.shields.io/badge/Plugin%20API-1.3.1-lightgrey)
 ![license](https://img.shields.io/badge/license-Apache--2.0-blue)
@@ -41,6 +41,7 @@ appliance decrypts on demand when you click download, and hands you a standard p
 | **Interactive or scheduled** | Host / VM tab for ad-hoc, Automation Task for Workflow + Job scheduling |
 | **48 capture presets** | Common traffic types — web, SSH, DNS, storage, database, overlay — as ready-made BPF filters, or write your own |
 | **Integrity gate** | Every export byte-verified against host-computed SHA-256 before decrypt |
+| **Stays out of the way** | The tab contacts the hypervisor only when you open it, never while a VM or host page is loading — and one setting hides it everywhere |
 
 ![Capture result](docs/images/04-capture-pass.png)
 *A completed capture. The jobId is the anchor for every log line on both the appliance and
@@ -105,12 +106,16 @@ error rather than as corrupt output.
 > **Upgrading?** Remove the existing plugin before uploading the new jar. Uploading over an
 > installed plugin can leave stale classes loaded while reporting success.
 
+Two plugin settings control the tab itself: **Show the kvm-echo tab** (on by default) and
+**Tab Load Mode** (`onOpen` by default, or `manual`). See
+[Tab settings](docs/USER-GUIDE.md#tab-settings) in the User Guide.
+
 ### Verify the download
 
 Each release publishes a SHA-256 checksum alongside the jar:
 
 ```bash
-sha256sum -c kvm-echo-0.8.1-all.jar.sha256
+sha256sum -c kvm-echo-0.9.1-all.jar.sha256
 ```
 
 ## Requirements
@@ -121,7 +126,7 @@ sha256sum -c kvm-echo-0.8.1-all.jar.sha256
 | **Hosts** | HVM hypervisors managed by Morpheus |
 | **Host OS** | Ubuntu 24 tested. Earlier Ubuntu likely works; RHEL / other untested |
 | **Bootstrap** | `setcap` on `tcpdump`; `morpheus-node` in the `libvirt` group |
-| **Account** | Able to run execution requests against those hosts |
+| **Account** | Able to run execution requests against those hosts. From 0.9.1, the `admin-cm` permission at Full to load the tab's content |
 
 Two-step host bootstrap, once per hypervisor. **No NOPASSWD sudoers entry** — the plugin
 uses Morpheus's built-in sudo escalation, so there is no host-side sudoers configuration to
